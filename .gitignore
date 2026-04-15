@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files (too large)
+data/raw/*
+data/processed/*
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Model checkpoints
+checkpoints/*.pth
+checkpoints/*.pt
+
+# Results
+results/*.png
+results/*.jpg
+
+# Logs
+logs/*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Conda
+*.conda
