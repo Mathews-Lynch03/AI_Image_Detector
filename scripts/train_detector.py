@@ -33,15 +33,7 @@ from scripts.data_utils import ImageDataset
 def get_transforms(training=True):
     """
     Get image transformations for training or validation
-    
-    Training transforms include augmentation:
-    Random rotation, flips, color jitter
-    Helps prevent overfitting
-    
-        training (bool): If True, apply augmentation
-    
-    Returns:
-        torchvision.transforms.Compose: Transform pipeline
+
     """
     if training and USE_AUGMENTATION:
         return transforms.Compose([
@@ -71,16 +63,7 @@ def get_transforms(training=True):
 def train_epoch(model, dataloader, criterion, optimizer, device):
     """
     Train for one epoch
-    
-    Args:
-        model: PyTorch model
-        dataloader: Training data loader
-        criterion: Loss function
-        optimizer: Optimization algorithm
-        device: 'cuda' or 'cpu'
-    
-    Returns:
-        tuple: (average_loss, accuracy)
+
     """
     model.train()
     running_loss = 0.0
@@ -122,14 +105,6 @@ def validate(model, dataloader, criterion, device):
     """
     Validate model on validation set
     
-    Args:
-        model: PyTorch model
-        dataloader: Validation data loader
-        criterion: Loss function
-        device: 'cuda' or 'cpu'
-    
-    Returns:
-        tuple: (average_loss, accuracy)
     """
     model.eval()
     running_loss = 0.0
@@ -155,16 +130,7 @@ def validate(model, dataloader, criterion, device):
 
 
 def plot_training_history(train_losses, val_losses, train_accs, val_accs, save_path):
-    """
-    Plot and save training history
-    
-    Args:
-        train_losses: List of training losses per epoch
-        val_losses: List of validation losses per epoch
-        train_accs: List of training accuracies per epoch
-        val_accs: List of validation accuracies per epoch
-        save_path: Where to save the plot
-    """
+
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     epochs = range(1, len(train_losses) + 1)
@@ -196,7 +162,6 @@ def plot_training_history(train_losses, val_losses, train_accs, val_accs, save_p
 # MAIN TRAINING FUNCTION
 
 def main():
-    """Main training pipeline"""
     
     print("\n" + "=" * 70)
     print("AI IMAGE DETECTOR - TRAINING")
@@ -206,7 +171,7 @@ def main():
     print_config()
     
     # Get dataset paths
-    subset = DEFAULT_SUBSET  # 'medium' from config
+    subset = DEFAULT_SUBSET  
     train_path, val_path = get_subset_paths(subset)
     
     # Verify subset exists
@@ -221,7 +186,6 @@ def main():
         print("\nRun: python scripts/create_subsets.py")
         return
     
-    # Create transforms
     print(f"\nLoading {subset} subset...")
     train_transform = get_transforms(training=True)
     val_transform = get_transforms(training=False)
@@ -251,7 +215,7 @@ def main():
     print(f"   Training batches: {len(train_loader)}")
     print(f"   Validation batches: {len(val_loader)}")
     
-    # Create model
+
     print(f"\nCreating {MODEL_NAME} model...")
     model = SpatialDetector(MODEL_NAME, pretrained=PRETRAINED, freeze_layers=FREEZE_LAYERS)
     model = model.to(DEVICE)
@@ -259,17 +223,14 @@ def main():
     total, trainable = model.count_parameters()
     print(f"   Total parameters: {total:,}")
     print(f"   Trainable parameters: {trainable:,}")
-    
-    # Loss and optimizer
+
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     
-    # Learning rate scheduler (optional but helps)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode='max', factor=0.5, patience=2, verbose=True
     )
     
-    # Training loop
     print(f"\nStarting training for {NUM_EPOCHS} epochs...")
     print("=" * 70)
     
@@ -283,13 +244,11 @@ def main():
         print(f"\nEpoch {epoch+1}/{NUM_EPOCHS}")
         print("-" * 70)
         
-        # Train
+
         train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, DEVICE)
         
-        # Validate
         val_loss, val_acc = validate(model, val_loader, criterion, DEVICE)
         
-        # Update scheduler
         scheduler.step(val_acc)
         
         # Store metrics
@@ -315,7 +274,7 @@ def main():
             }, MODEL_CHECKPOINT)
             print(f"   Best model saved! (Val Acc: {val_acc:.2f}%)")
     
-    # Training complete
+
     elapsed_time = datetime.now() - start_time
     print("\n" + "=" * 70)
     print("TRAINING COMPLETE!")
@@ -324,7 +283,6 @@ def main():
     print(f"Best validation accuracy: {best_val_acc:.2f}%")
     print(f"Model saved to: {MODEL_CHECKPOINT}")
     
-    # Plot training history
     plot_path = RESULTS_DIR / f"{MODEL_NAME}_training_history.png"
     plot_training_history(train_losses, val_losses, train_accs, val_accs, plot_path)
     

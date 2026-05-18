@@ -1,7 +1,7 @@
 """
 Example client for AI Image Detector API
 
-This script demonstrates how to use the API from Python code.
+This script demonstrates how to use the API from 
 """
 
 import requests
@@ -23,12 +23,7 @@ class AIDetectorClient:
     def detect(self, image_path):
         """
         Detect if an image is AI-generated using ensemble method
-        
-        Args:
-            image_path: Path to image file
-            
-        Returns:
-            Dictionary with prediction results
+    
         """
         
         with open(image_path, 'rb') as f:
@@ -65,7 +60,6 @@ class AIDetectorClient:
         return response.json()
 
 def main():
-    """Example usage"""
     
     # Create client
     client = AIDetectorClient()

@@ -32,60 +32,42 @@ TRAIN_FAKE = RAW_DATA_DIR / "train" / "FAKE"
 TEST_REAL = RAW_DATA_DIR / "test" / "REAL"
 TEST_FAKE = RAW_DATA_DIR / "test" / "FAKE"
 
-# Ensure critical directories exist
+
 for directory in [CHECKPOINTS_DIR, RESULTS_DIR, LOGS_DIR]:
     directory.mkdir(parents=True, exist_ok=True)
 
 # TRAINING HYPERPARAMETERS
 
 # Image preprocessing
-IMAGE_SIZE = 224  # Standard for ResNet (224x224 pixels)
-                  # Reference: He et al. (2016) "Deep Residual Learning"
+IMAGE_SIZE = 224  
 
-# Training parameters
-BATCH_SIZE = 32   # Images processed simultaneously
-                  # 32 works well for 12GB GPU
-                  # Larger = faster training but more memory
 
-LEARNING_RATE = 0.001  # Step size for gradient descent
-                       # 0.001 is standard starting point for Adam
-                       # Reference: Kingma & Ba (2014) "Adam Optimizer"
+BATCH_SIZE = 32   
 
-NUM_EPOCHS = 10   # Complete passes through training data
-                  # Start with 10, monitor for convergence
+LEARNING_RATE = 0.001  
 
-NUM_WORKERS = 4   # Parallel data loading threads
-                  # 4 is good for modern CPUs
-                  # Set to 0 if you encounter errors
+NUM_EPOCHS = 10   
 
-# Early stopping
-PATIENCE = 3      # Stop if no improvement for N epochs
-MIN_DELTA = 0.001 # Minimum improvement to count as progress
+NUM_WORKERS = 4   
+
+PATIENCE = 3      
+MIN_DELTA = 0.001 
 
 # MODEL CONFIGURATION
 
-MODEL_NAME = "resnet18"  # Options: resnet18, resnet50, mobilenet_v2
-                         # resnet18: Fast, 11M params, good baseline
-                         # resnet50: Slower, 25M params, higher accuracy
+MODEL_NAME = "resnet18"  
 
-PRETRAINED = True  # Use ImageNet pre-trained weights
-                   # True = Transfer learning (RECOMMENDED)
-                   # False = Train from scratch (much slower)
+PRETRAINED = True  
 
-FREEZE_LAYERS = 10  # Number of early layers to freeze
-                    # Frozen layers keep ImageNet features
-                    # Only later layers learn fake detection
+FREEZE_LAYERS = 10  
 
-# Model save path
+
 MODEL_CHECKPOINT = CHECKPOINTS_DIR / f"{MODEL_NAME}_detector_best.pth"
 
 # DATA AUGMENTATION
-# Data augmentation helps prevent overfitting
-# Reference: Shorten & Khoshgoftaar (2019) "Survey on Image Data Augmentation"
 
 USE_AUGMENTATION = True
 
-# Augmentation parameters
 AUGMENTATION_CONFIG = {
     'random_rotation': 15,        # Rotate ±15 degrees
     'horizontal_flip_prob': 0.5,  # 50% chance to flip
@@ -97,26 +79,18 @@ AUGMENTATION_CONFIG = {
     }
 }
 
-# NORMALIZATION (ImageNet statistics)
-
-# These are standard values for ImageNet pre-trained models
-# Reference: He et al. (2016) - ResNet paper
-
 IMAGENET_MEAN = [0.485, 0.456, 0.406]  # RGB channel means
 IMAGENET_STD = [0.229, 0.224, 0.225]   # RGB channel std devs
 
-# DEVICE CONFIGURATION
+# DEVICE 
 
-# Automatically use GPU if available
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# GPU optimization settings
 if torch.cuda.is_available():
-    # Enable TensorFloat32 for faster computation on Ampere GPUs
+
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.allow_tf32 = True
     
-    # Enable cuDNN auto-tuner for optimal convolution algorithms
     torch.backends.cudnn.benchmark = True
     
     print(f"GPU detected: {torch.cuda.get_device_name(0)}")
@@ -124,30 +98,22 @@ if torch.cuda.is_available():
 else:
     print("WARNING: No GPU detected, training will be slow!")
 
-# LOGGING CONFIGURATION
 
-LOG_INTERVAL = 10     # Print stats every N batches
-SAVE_BEST_ONLY = True # Only save when validation improves
+LOG_INTERVAL = 10     
+SAVE_BEST_ONLY = True 
 
-# Log file path
 LOG_FILE = LOGS_DIR / f"{MODEL_NAME}_training.log"
 
-# EVALUATION METRICS
-# Reference: 
 
 METRICS = ['accuracy', 'precision', 'recall', 'f1_score']
 
-# Class names
 CLASS_NAMES = ['Real', 'AI-Generated']
 
-# DATASET CONFIGURATION
 
 
-# Dataset split ratios 
 TRAIN_RATIO = 0.8
 VAL_RATIO = 0.2
 
-# Subset sizes for quick testing
 SUBSET_SIZES = {
     'tiny': {'train': 500, 'val': 100},      # Quick sanity check
     'small': {'train': 1000, 'val': 200},    # Debugging
@@ -156,10 +122,8 @@ SUBSET_SIZES = {
     'full': {'train': 60000, 'val': 20000}   # Full dataset
 }
 
-# Default subset to use
 DEFAULT_SUBSET = 'medium'
 
-# UTILITY FUNCTIONS
 
 def print_config():
     """Print current configuration summary"""
@@ -198,7 +162,6 @@ def get_subset_paths(subset_name='medium'):
     val_path = PROCESSED_DATA_DIR / f"val_{subset_name}"
     return train_path, val_path
 
-# INITIALIZE
 
 if __name__ == "__main__":
     print_config()

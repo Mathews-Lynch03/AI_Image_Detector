@@ -2,7 +2,7 @@
 echo Starting AI Image Detector API...
 echo.
 
-cd /d C:\Users\smath\OneDrive\Documents\DKIT_Year_4\Project\AI-Image-Detector
+cd /d C:\Users\smath\OneDrive\Documents\DKIT_Year_4\AI-Image-Detector
 
 echo Activating conda environment...
 call conda activate ai-detector

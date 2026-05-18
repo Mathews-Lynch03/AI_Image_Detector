@@ -61,17 +61,12 @@ class ImageDataset(Dataset):
         print(f"  Fake: {sum(1 for l in self.labels if l == 1):,}")
     
     def __len__(self):
-        """Return total number of images"""
         return len(self.images)
     
     def __getitem__(self, idx):
         """
         Load and return one image-label pair
         
-            idx (int): Index of image to load
-        
-        Returns:
-            tuple: (image, label) where image is transformed PIL Image or Tensor
         """
         img_path = self.images[idx]
         label = self.labels[idx]
@@ -96,10 +91,6 @@ def count_images(directory):
     """
     Count number of images in a directory
     
-        directory (str/Path): Directory to count images in
-    
-    Returns:
-        int: Number of image files found
     """
     directory = Path(directory)
     if not directory.exists():
@@ -114,15 +105,6 @@ def create_subset(source_real, source_fake, dest_dir, n_samples, seed=42):
     """
     Create a balanced subset of images for faster experimentation
     
-    Args:
-        source_real (str/Path): Source directory for real images
-        source_fake (str/Path): Source directory for fake images
-        dest_dir (str/Path): Destination directory for subset
-        n_samples (int): Number of samples PER CLASS (total = 2*n_samples)
-        seed (int): Random seed for reproducibility
-    
-    Returns:
-        tuple: (num_real_copied, num_fake_copied)
     """
     random.seed(seed)
     
