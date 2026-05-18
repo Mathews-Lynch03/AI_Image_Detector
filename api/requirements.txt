@@ -1,0 +1,13 @@
+# FastAPI Backend Requirements
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Already installed in ai-detector environment:
+# torch
+# torchvision
+# numpy
+# Pillow
+# scikit-learn
