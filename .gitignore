@@ -4,42 +4,66 @@ __pycache__/
 *$py.class
 *.so
 .Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
 env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
-# Jupyter
-.ipynb_checkpoints/
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Data files (too large)
-data/raw/*
-data/processed/*
-*.jpg
-*.jpeg
-*.png
-*.gif
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
-# Model checkpoints
+# Data files (large datasets I don't upload to GitHub)
+data/raw/
+data/processed/
+*.zip
+*.tar.gz
+
+# Model checkpoints (large binary files)
 checkpoints/*.pth
-checkpoints/*.pt
+checkpoints/*.pkl
 
-# Results
+# config file
+!checkpoints/ensemble_config.txt
+
+# Logs
+logs/
+*.log
+
+# Results images
 results/*.png
 results/*.jpg
 
-# Logs
-logs/*.log
+#results directory structure
+!results/.gitkeep
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
+# OS files
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Conda
-*.conda
+*.tmp
+*.bak
