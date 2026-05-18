@@ -1,0 +1,6 @@
+Spatial weight: 0.6
+Frequency weight: 0.4
+Accuracy: 86.50%
+Precision: 88.42%
+Recall: 84.00%
+F1-Score: 86.15%
